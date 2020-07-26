@@ -2379,7 +2379,7 @@ void FileSystemDock::_file_and_folders_fill_popup(PopupMenu *p_popup, Vector<Str
 	if (p_paths.size() > 1 || p_paths[0] != "res://") {
 		if (!all_folders) {
 			p_popup->add_separator();
-			p_popup->add_icon_item(get_icon("Help", "EditorIcons"), TTR("Open Documentation"), FILE_DOCUMENTATION);
+			p_popup->add_icon_item(get_theme_icon("Help", "EditorIcons"), TTR("Open Documentation"), FILE_DOCUMENTATION);
 		}
 	}
 
