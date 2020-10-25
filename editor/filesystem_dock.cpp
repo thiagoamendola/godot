@@ -2378,8 +2378,15 @@ void FileSystemDock::_file_and_folders_fill_popup(PopupMenu *p_popup, Vector<Str
 
 	if (p_paths.size() > 1 || p_paths[0] != "res://") {
 		if (!all_folders) {
-			p_popup->add_separator();
-			p_popup->add_icon_item(get_theme_icon("Help", "EditorIcons"), TTR("Open Documentation"), FILE_DOCUMENTATION);
+			if (filenames.size() == 1) {
+				String file_type = EditorFileSystem::get_singleton()->get_file_type(filenames[0]);
+				String option_name = TTR("Open Documentation for ") + file_type;
+				p_popup->add_separator();
+				p_popup->add_icon_item(get_icon("Help", "EditorIcons"), option_name, FILE_DOCUMENTATION);
+			}else{
+				p_popup->add_separator();
+				p_popup->add_icon_item(get_icon("Help", "EditorIcons"), TTR("Open Documentation"), FILE_DOCUMENTATION);
+			}
 		}
 	}
 
