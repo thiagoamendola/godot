@@ -1847,7 +1847,9 @@ void FileSystemDock::_file_option(int p_option, const Vector<String> &p_selected
 			for (int i = 0; i < p_selected.size(); i++) {
 				if (!p_selected[i].ends_with("/")) {
 					String file_type = EditorFileSystem::get_singleton()->get_file_type(p_selected[i]);
-					ScriptEditor::get_singleton()->goto_help("class_name:" + file_type);
+					if (ClassDB::class_exists(file_type)) {
+						ScriptEditor::get_singleton()->goto_help("class_name:" + file_type);
+					}
 				}
 			}
 			EditorNode::get_singleton()->set_visible_editor(EditorNode::EDITOR_SCRIPT);
@@ -2378,14 +2380,16 @@ void FileSystemDock::_file_and_folders_fill_popup(PopupMenu *p_popup, Vector<Str
 
 	if (p_paths.size() > 1 || p_paths[0] != "res://") {
 		if (!all_folders) {
-			if (filenames.size() == 1) {
-				String file_type = EditorFileSystem::get_singleton()->get_file_type(filenames[0]);
-				String option_name = TTR("Open Documentation for ") + file_type;
+			bool has_built_in = false;
+			for (int i = 0; i < filenames.size() ; i++) {
+				String file_type = EditorFileSystem::get_singleton()->get_file_type(filenames[i]);
+				if (ClassDB::class_exists(file_type)) {
+					has_built_in = true;
+				}
+			}
+			if (has_built_in) {
 				p_popup->add_separator();
-				p_popup->add_icon_item(get_icon("Help", "EditorIcons"), option_name, FILE_DOCUMENTATION);
-			}else{
-				p_popup->add_separator();
-				p_popup->add_icon_item(get_icon("Help", "EditorIcons"), TTR("Open Documentation"), FILE_DOCUMENTATION);
+				p_popup->add_icon_item(get_icon("Help", "EditorIcons"), TTR("Open Class Documentation"), FILE_DOCUMENTATION);
 			}
 		}
 	}
